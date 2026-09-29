@@ -16,5 +16,10 @@ const players=Object.entries(cfg.players).map(([name,teams])=>{const rec=teams.m
 players.sort((a,b)=>b.wins-a.wins||b.worstTeamWins-a.worstTeamWins);
 const nextWeek=Math.min(18,throughWeek+1);
 const upcoming=rows.filter(g=>+g.week===nextWeek).map(g=>({week:+g.week,gameday:g.gameday,gametime:g.gametime,away:g.away_team,home:g.home_team}));
-const out={generatedAt:new Date().toISOString(),season:cfg.season,throughWeek,nextWeek,players,perfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
-await fs.mkdir("generated",{recursive:true});await fs.writeFile("generated/current.json",JSON.stringify(out,null,2)+"\n");console.log(`Generated through Week ${throughWeek}; next Week ${nextWeek}`);
+const semantic={season:cfg.season,throughWeek,nextWeek,players,perfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
+await fs.mkdir("generated",{recursive:true});
+let previous=null;try{previous=JSON.parse(await fs.readFile("generated/current.json","utf8"));}catch{}
+const previousSemantic=previous&&Object.fromEntries(Object.entries(previous).filter(([k])=>k!=="generatedAt"));
+if(previousSemantic&&JSON.stringify(previousSemantic)===JSON.stringify(semantic)){console.log("No NFL data changes; generated file left untouched.");process.exit(0);}
+const out={generatedAt:new Date().toISOString(),...semantic};
+await fs.writeFile("generated/current.json",JSON.stringify(out,null,2)+"\n");console.log(`Generated through Week ${throughWeek}; next Week ${nextWeek}`);
