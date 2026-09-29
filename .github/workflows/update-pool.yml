@@ -2,6 +2,10 @@ name: Update NFL pool data
 on:
   workflow_dispatch:
   schedule:
+    # Frequent refreshes on NFL game days during the regular season.
+    # Generated data only commits when something actually changes.
+    - cron: "*/15 * * 9-12 0,1,4"
+    # Tuesday safety/finalization refresh.
     - cron: "30 13 * 9-12 2"
 permissions:
   contents: write
@@ -19,5 +23,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add generated/current.json
-          git diff --cached --quiet || git commit -m "Update weekly NFL pool data"
+          git diff --cached --quiet || git commit -m "Update NFL pool data"
           git push
