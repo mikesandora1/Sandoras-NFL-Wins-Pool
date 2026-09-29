@@ -13,7 +13,7 @@ function resultFor(g,t){const a=+g.away_score,b=+g.home_score,tw=g.away_team===t
 const weekly={}; const perfectWeeks=[];
 for(const [name,teams] of Object.entries(cfg.players)){weekly[name]={};for(const w of completedWeeks){const wr={w:0,l:0,t:0};for(const t of teams){const g=done.find(x=>+x.week===w&&(x.away_team===t||x.home_team===t));if(!g)continue;const r=resultFor(g,t);wr[r.toLowerCase()]++;}weekly[name][w]=wr;if(wr.w===3)perfectWeeks.push({player:name,week:w});}}
 const players=Object.entries(cfg.players).map(([name,teams])=>{const rec=teams.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})}));return{name,teams:rec,wins:rec.reduce((n,r)=>n+r.w,0),games:rec.reduce((n,r)=>n+r.g,0),worstTeamWins:Math.min(...rec.map(r=>r.w)),weekly:weekly[name],recent:weekly[name][throughWeek]||{w:0,l:0,t:0},perfect:perfectWeeks.filter(x=>x.player===name).length};});
-players.sort((a,b)=>b.wins-a.wins||b.worstTeamWins-a.worstTeamWins);
+players.sort((a,b)=>b.wins-a.wins);
 const nextWeek=Math.min(18,throughWeek+1);
 const upcoming=rows.filter(g=>+g.week===nextWeek).map(g=>({week:+g.week,gameday:g.gameday,gametime:g.gametime,away:g.away_team,home:g.home_team}));
 const semantic={season:cfg.season,throughWeek,nextWeek,players,perfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
