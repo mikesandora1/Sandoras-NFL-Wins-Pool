@@ -2,8 +2,8 @@ name: Update NFL pool data
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/15 * * 9-12 0,1,4"
-    - cron: "30 13 * 9-12 2"
+    - cron: "*/15 * * 9-12,1 0,1,4"
+    - cron: "30 13 * 9-12,1 2"
 permissions:
   contents: write
 jobs:
