@@ -2,10 +2,7 @@ name: Update NFL pool data
 on:
   workflow_dispatch:
   schedule:
-    # Frequent refreshes on NFL game days during the regular season.
-    # Generated data only commits when something actually changes.
     - cron: "*/15 * * 9-12 0,1,4"
-    # Tuesday safety/finalization refresh.
     - cron: "30 13 * 9-12 2"
 permissions:
   contents: write
@@ -18,6 +15,8 @@ jobs:
         with:
           node-version: "22"
       - run: node automation/update-data.mjs
+      - name: Validate known Week 3 baseline
+        run: node automation/validate-week3.mjs
       - name: Commit generated data
         run: |
           git config user.name "github-actions[bot]"
