@@ -424,7 +424,7 @@
       "name": "Pete",
       "teams": [
         {
-          "code": "LA",
+          "code": "LAR",
           "w": 1,
           "l": 2,
           "t": 0,
@@ -614,7 +614,7 @@
       "week": 4,
       "gameday": "2026-10-04",
       "gametime": "13:00",
-      "away": "LA",
+      "away": "LAR",
       "home": "PHI"
     },
     {
@@ -683,5 +683,337 @@
   ],
   "currentWeek": 3,
   "weekInProgress": false,
-  "displayWeek": 4
+  "displayWeek": 4,
+  "livePlayers": [
+    {
+      "name": "Lou",
+      "teams": [
+        {
+          "code": "PHI",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "DEN",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "LV",
+          "w": 3,
+          "l": 0,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 7,
+      "games": 9,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
+      "name": "Andy",
+      "teams": [
+        {
+          "code": "KC",
+          "w": 3,
+          "l": 0,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "DAL",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "MIN",
+          "w": 3,
+          "l": 0,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 7,
+      "games": 9,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
+      "name": "Brian",
+      "teams": [
+        {
+          "code": "BUF",
+          "w": 3,
+          "l": 0,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "GB",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "CLE",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 6,
+      "games": 9,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
+      "name": "Sandora",
+      "teams": [
+        {
+          "code": "DET",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "PIT",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "NYG",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 6,
+      "games": 9,
+      "currentWeek": {
+        "w": 3,
+        "l": 0,
+        "t": 0
+      }
+    },
+    {
+      "name": "Jay",
+      "teams": [
+        {
+          "code": "BAL",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "JAX",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "NYJ",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 5,
+      "games": 9,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
+      "name": "Nate",
+      "teams": [
+        {
+          "code": "NE",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "CIN",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "IND",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 4,
+      "games": 9,
+      "currentWeek": {
+        "w": 1,
+        "l": 2,
+        "t": 0
+      }
+    },
+    {
+      "name": "Shaffer",
+      "teams": [
+        {
+          "code": "SF",
+          "w": 3,
+          "l": 0,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "LAC",
+          "w": 0,
+          "l": 3,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "WAS",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 4,
+      "games": 9,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
+      "name": "Tommy",
+      "teams": [
+        {
+          "code": "SEA",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "TB",
+          "w": 0,
+          "l": 3,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "NO",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 3,
+      "games": 9,
+      "currentWeek": {
+        "w": 0,
+        "l": 3,
+        "t": 0
+      }
+    },
+    {
+      "name": "Pete",
+      "teams": [
+        {
+          "code": "LAR",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "CAR",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "ATL",
+          "w": 1,
+          "l": 2,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 3,
+      "games": 9,
+      "currentWeek": {
+        "w": 1,
+        "l": 2,
+        "t": 0
+      }
+    },
+    {
+      "name": "Mullane",
+      "teams": [
+        {
+          "code": "HOU",
+          "w": 0,
+          "l": 3,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "CHI",
+          "w": 2,
+          "l": 1,
+          "t": 0,
+          "g": 3
+        },
+        {
+          "code": "TEN",
+          "w": 0,
+          "l": 3,
+          "t": 0,
+          "g": 3
+        }
+      ],
+      "wins": 2,
+      "games": 9,
+      "currentWeek": {
+        "w": 1,
+        "l": 2,
+        "t": 0
+      }
+    }
+  ]
 }
