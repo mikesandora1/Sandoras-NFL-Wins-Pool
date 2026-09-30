@@ -33,7 +33,7 @@ for(const code of new Set([...Object.values(cfg.players).flat(),...cfg.undrafted
 const teamRecords=buildTeamRecords(done);
 const recapPlayers=livePlayers.map(p=>({...p,perfect:perfectWeeks.filter(x=>x.player===p.name&&x.week<=currentWeek).length,weekly:weekly[p.name],recent:weekly[p.name]?.[currentWeek]||{w:0,l:0,t:0}}));
 const finalizedPerfectWeeks=perfectWeeks.filter(x=>x.week<=throughWeek);
-const semantic={season:cfg.season,throughWeek,currentWeek,weekInProgress,displayWeek,nextWeek,players,livePlayers,recapWeek:currentWeek,recapPlayers,perfectWeeks:finalizedPerfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
+const semantic={season:cfg.season,throughWeek,currentWeek,weekInProgress,displayWeek,nextWeek,players,livePlayers,recapWeek:currentWeek,recapPlayers,perfectWeeks:finalizedPerfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming,remainingSchedule,teamRecords};
 await fs.mkdir("generated",{recursive:true});
 let previous=null;try{previous=JSON.parse(await fs.readFile("generated/current.json","utf8"));}catch{}
 const previousSemantic=previous&&Object.fromEntries(Object.entries(previous).filter(([k])=>k!=="generatedAt"));
