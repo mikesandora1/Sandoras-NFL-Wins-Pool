@@ -49,19 +49,27 @@ function movementValue(n){let w=D.live?.throughWeek||3;if(w<=1)return 0;if(D.liv
 function movement(n){let m=D.live?movementValue(n):META[n].move;return m>0?`<span class="move up">▲ ${m}</span>`:m<0?`<span class="move down">▼ ${Math.abs(m)}</span>`:`<span class="move same">—</span>`}function teamChip(t){let c=COLORS[t.team]||'#334155',w=activeWeek(),bw=byeWeekFor(t.team),onBye=bw===w;return `<span class="team ${onBye?'on-bye':''}" style="--team:${c}"><i></i><span>${t.team}</span><b>${t.w}-${t.l}${t.t?'-'+t.t:''}</b>${onBye?`<em>BYE W${w}</em>`:''}</span>`}
 function table(ps){return `<div class="tablewrap"><table><thead><tr><th>Place</th><th>Player</th><th>Teams</th><th>Wins</th><th>Win %</th><th>Last Week</th><th>1st Chance</th><th>Top 3 Chance</th><th>Perfect</th></tr></thead><tbody>${ps.map((p,i)=>`<tr><td class="rank"><span>${i+1}</span>${movement(p.name)}</td><td><b>${p.name}</b></td><td><div class="teams">${p.teams.map(teamChip).join('')}</div></td><td><b>${p.wins}</b></td><td class="pct">${(pct(p)*100).toFixed(1)}%</td><td><span class="weekrec ${(p.recent?.w===3)?'perfectrec':(p.recent?.l===3)?'badrec':''}">${p.recent?`${p.recent.w}–${p.recent.l}`:META[p.name].recent}</span></td><td><b>${projection(p.name).first.toFixed(1)}%</b></td><td><b>${projection(p.name).top3.toFixed(1)}%</b></td><td>${p.perfect}</td></tr>`).join('')}</tbody></table></div>`}
 function weeklyTakeaways(){
- let w=D.live?.recapWeek||D.live?.throughWeek||3,ps=D.live?.recapPlayers||standings(),items=[];
- let perfect=ps.filter(p=>(p.weekly?.[w]?.w||0)===3);
- if(perfect.length)items.push(`<b>Perfect Week:</b> ${perfect.map(p=>p.name).join(' and ')} went 3–0 in Week ${w}. No style points required — three wins is three wins.`);
- let movers=ps.map(p=>({p,m:movementValue(p.name)})).sort((a,b)=>b.m-a.m);
- if(movers[0]?.m>0)items.push(`<b>Biggest mover:</b> ${movers[0].p.name} climbed ${movers[0].m} spot${movers[0].m===1?'':'s'} after a ${movers[0].p.weekly[w].w}–${movers[0].p.weekly[w].l} Week ${w}.`);
- let carried=ps.map(p=>{let ts=[...p.teams].sort((a,b)=>b.w-a.w);return{p,top:ts[0],share:p.wins?ts[0].w/p.wins:0}}).sort((a,b)=>b.share-a.share)[0];
- if(carried)items.push(`<b>Carried by one team:</b> ${carried.p.name}'s ${carried.top.team} account for ${carried.top.w} of ${carried.p.wins} pool wins. That's ${Math.round(carried.share*100)}% of the operation coming from one draft pick.`);
- let balanced=ps.map(p=>({p,spread:Math.max(...p.teams.map(t=>t.w))-Math.min(...p.teams.map(t=>t.w))})).sort((a,b)=>a.spread-b.spread)[0];
- if(balanced)items.push(`<b>Three-team balance:</b> ${balanced.p.name} has the tightest spread across his three teams — only ${balanced.spread} win${balanced.spread===1?'':'s'} separates best from worst.`);
- let rough=ps.map(p=>({p,r:p.weekly?.[w]||{w:0,l:0}})).sort((a,b)=>b.r.l-a.r.l)[0];
- if(rough?.r.l)items.push(`<b>Rough week:</b> ${rough.p.name} went ${rough.r.w}–${rough.r.l} in Week ${w}. The standings have officially entered the group-chat evidence locker.`);
- let late=[...D.draft].sort((a,b)=>b.pick-a.pick).map(x=>{let p=D.players.find(p=>p.name===x.player),t=p?.teams.find(t=>t.team===x.team);return{x,t}}).filter(z=>z.t).sort((a,b)=>b.t.w-a.t.w||b.x.pick-a.x.pick)[0];
- if(late)items.push(`<b>Late-pick receipt:</b> ${late.x.player}'s #${late.x.pick} pick, ${late.x.team}, has ${late.t.w} win${late.t.w===1?'':'s'} through Week ${w}.`);
+ let w=D.live?.recapWeek||D.live?.throughWeek||3,ps=D.live?.recapPlayers||standings(),items=[],used=new Set();
+ const add=(name,html)=>{if(!used.has(name)){items.push(html);used.add(name)}};
+ const rec=p=>p.weekly?.[w]||{w:0,l:0};
+ let perfect=ps.filter(p=>rec(p).w===3);
+ perfect.forEach(p=>add(p.name,`<b>${p.name} chose violence.</b> A 3–0 Week ${w} means everybody else gets to hear about it until at least Thursday. Three teams entered; three wins left. Annoyingly efficient.`));
+ let disaster=ps.filter(p=>rec(p).l===3);
+ disaster.forEach(p=>add(p.name,`<b>${p.name} would like Week ${w} stricken from the record.</b> An 0–3 masterpiece: three teams, zero wins, and absolutely no reason to reopen the group chat until next week.`));
+ let movers=ps.map(p=>({p,m:movementValue(p.name),r:rec(p)})).sort((a,b)=>b.m-a.m);
+ if(movers[0]?.m>0)add(movers[0].p.name,`<b>${movers[0].p.name} has entered the chat.</b> A ${movers[0].r.w}–${movers[0].r.l} week moved him up ${movers[0].m} spot${movers[0].m===1?'':'s'}. Nothing like one good Sunday to suddenly develop very strong opinions about the standings.`);
+ let fall=[...movers].sort((a,b)=>a.m-b.m)[0];
+ if(fall?.m<0)add(fall.p.name,`<b>${fall.p.name} is headed in the wrong direction.</b> Week ${w} sent him down ${Math.abs(fall.m)} spot${Math.abs(fall.m)===1?'':'s'}. The standings are not technically judging him, but everyone else is allowed to.`);
+ let carried=ps.map(p=>{let ts=[...p.teams].sort((a,b)=>b.w-a.w),share=p.wins?ts[0].w/p.wins:0;return{p,top:ts[0],share}}).sort((a,b)=>b.share-a.share)[0];
+ if(carried&&carried.share>=.4)add(carried.p.name,`<b>${carried.p.name} is running a one-team operation.</b> The ${carried.top.team} have supplied ${carried.top.w} of his ${carried.p.wins} wins — ${Math.round(carried.share*100)}% of the entire portfolio. The other two picks are encouraged to begin participating whenever convenient.`);
+ let ugly=ps.map(p=>({p,zeros:p.teams.filter(t=>t.w===0),best:[...p.teams].sort((a,b)=>b.w-a.w)[0]})).filter(x=>x.zeros.length).sort((a,b)=>b.zeros.length-a.zeros.length)[0];
+ if(ugly)add(ugly.p.name,`<b>${ugly.p.name}'s draft board is developing a problem.</b> ${ugly.zeros.map(t=>t.team).join(' and ')} ${ugly.zeros.length===1?'is':'are'} still sitting on zero wins. ${ugly.best.team} is currently being asked to carry a workload that was not in the job description.`);
+ let balanced=ps.map(p=>({p,spread:Math.max(...p.teams.map(t=>t.w))-Math.min(...p.teams.map(t=>t.w))})).sort((a,b)=>a.spread-b.spread||b.p.wins-a.p.wins)[0];
+ if(balanced)add(balanced.p.name,`<b>${balanced.p.name} is refusing to provide easy material.</b> His three teams are separated by only ${balanced.spread} win${balanced.spread===1?'':'s'}. No obvious disaster, no ridiculous carry job — just irritating competence.`);
+ let late=[...D.draft].sort((a,b)=>b.pick-a.pick).map(x=>{let p=ps.find(p=>p.name===x.player),t=p?.teams.find(t=>t.team===x.team);return{x,t,p}}).filter(z=>z.t).sort((a,b)=>b.t.w-a.t.w||b.x.pick-a.x.pick)[0];
+ if(late)add(late.p.name,`<b>Late-round receipt alert:</b> ${late.x.player} grabbed the ${late.x.team} at pick #${late.x.pick}, and they already have ${late.t.w} win${late.t.w===1?'':'s'}. Somewhere, an earlier pick is quietly hoping nobody scrolls over to the Draft tab.`);
+ let leader=[...ps].sort((a,b)=>b.wins-a.wins)[0];
+ if(leader)add(leader.name,`<b>${leader.name} currently owns the big chair.</b> ${leader.wins} wins puts him on top through Week ${w}. Enjoy the view; this league has a long history of turning screenshots into evidence.`);
  return items.slice(0,6);
 }
 function home(){let s=standings(),lead=s[0],total=D.players.reduce((n,p)=>n+p.games,0);let tids=D.live?weeklyTakeaways():[
