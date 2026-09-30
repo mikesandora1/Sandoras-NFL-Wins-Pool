@@ -9,7 +9,8 @@ window.LIVE_POOL_READY=fetch("generated/current.json",{cache:"no-store"})
   const finalized=live.players.map(p=>({name:p.name,teams:p.teams.map(t=>({code:t.code,team:names[t.code]||t.code,w:t.w,l:t.l,t:t.t})),wins:p.wins,games:p.games,perfect:p.perfect,recent:p.recent,weekly:p.weekly}));
   base.players=structuredClone(finalized);
   base.perfectWeeks=live.perfectWeeks;
-  const recapPlayers=(live.recapPlayers||live.players).map(p=>({...p,teams:p.teams.map(t=>({code:t.code,team:names[t.code]||t.code,w:t.w,l:t.l,t:t.t}))}));\n  base.live={...live,names,recapPlayers,scoreboard:null};
+  const recapPlayers=(live.recapPlayers||live.players).map(p=>({...p,teams:p.teams.map(t=>({code:t.code,team:names[t.code]||t.code,w:t.w,l:t.l,t:t.t}))}));
+  base.live={...live,names,recapPlayers,scoreboard:null};
   function applyScoreboard(sb){
     const ps=structuredClone(finalized),week=sb.week;
     if(week>live.throughWeek){
@@ -19,8 +20,7 @@ window.LIVE_POOL_READY=fetch("generated/current.json",{cache:"no-store"})
           const g=sb.games.find(g=>g.completed&&(g.home===t.code||g.away===t.code));
           if(!g)continue;
           const mine=g.home===t.code?g.homeScore:g.awayScore,opp=g.home===t.code?g.awayScore:g.homeScore;
-          t.w+=mine>opp?1:0;t.l+=mine<=opp?1:0;t.t+=mine===opp?1:0;
-          t.t-=mine===opp?1:0; // pool standings treat an NFL tie as a loss, not a separate pool result
+          t.w+=mine>opp?1:0;t.l+=mine<opp?1:0;t.t+=mine===opp?1:0; // NFL team record preserves ties
           wr.w+=mine>opp?1:0;wr.l+=mine<=opp?1:0;
         }
         p.wins=p.teams.reduce((n,t)=>n+t.w,0);p.games=p.teams.reduce((n,t)=>n+t.w+t.l+t.t,0);p.recent=wr;if(wr.finals===3&&wr.w===3)p.perfect++;
