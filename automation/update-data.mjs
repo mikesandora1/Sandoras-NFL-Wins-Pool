@@ -5,7 +5,7 @@ const res=await fetch(url); if(!res.ok) throw new Error(`NFL data fetch failed: 
 const raw=await res.text();
 function csv(line){let a=[],s="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c=='"'){if(q&&line[i+1]=='"'){s+='"';i++;}else q=!q;}else if(c===","&&!q){a.push(s);s="";}else s+=c;}a.push(s);return a;}
 const lines=raw.trim().split(String.fromCharCode(10)).map(x=>x.endsWith(String.fromCharCode(13))?x.slice(0,-1):x),h=csv(lines.shift());
-const rows=lines.map(x=>{const v=csv(x),o={};h.forEach((k,i)=>o[k]=v[i]);return o;}).filter(g=>+g.season===cfg.season&&g.game_type==="REG");
+const rows=lines.map(x=>{const v=csv(x),o={};h.forEach((k,i)=>o[k]=v[i]);if(o.away_team==="LA")o.away_team="LAR";if(o.home_team==="LA")o.home_team="LAR";return o;}).filter(g=>+g.season===cfg.season&&g.game_type==="REG");
 const done=rows.filter(g=>g.away_score!==""&&g.home_score!=="");
 const resultWeeks=[...new Set(done.map(g=>+g.week))].sort((a,b)=>a-b);
 const scheduledWeeks=[...new Set(rows.map(g=>+g.week))].sort((a,b)=>a-b);
