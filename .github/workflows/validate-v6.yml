@@ -1,0 +1,25 @@
+name: Validate v6
+on:
+  push:
+    branches: [v6-automation]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax checks
+        run: |
+          node --check app.js
+          node --check live-data.js
+          node --check automation/update-data.mjs
+          node --check automation/validate-week3.mjs
+          node --check netlify/functions/live-nfl.mjs
+      - name: Validate known baseline
+        run: node automation/validate-week3.mjs
