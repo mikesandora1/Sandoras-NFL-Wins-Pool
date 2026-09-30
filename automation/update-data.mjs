@@ -4,7 +4,8 @@ const url="https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.
 const res=await fetch(url); if(!res.ok) throw new Error(`NFL data fetch failed: ${res.status}`);
 const raw=await res.text();
 function csv(line){let a=[],s="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c=='"'){if(q&&line[i+1]=='"'){s+='"';i++;}else q=!q;}else if(c===","&&!q){a.push(s);s="";}else s+=c;}a.push(s);return a;}
-const lines=raw.trim().split(/\\r?\\n/),h=csv(lines.shift());
+const lines=raw.trim().split(/\\r?\
+/),h=csv(lines.shift());
 const rows=lines.map(x=>{const v=csv(x),o={};h.forEach((k,i)=>o[k]=v[i]);return o;}).filter(g=>+g.season===cfg.season&&g.game_type==="REG");
 const done=rows.filter(g=>g.away_score!==""&&g.home_score!=="");
 const resultWeeks=[...new Set(done.map(g=>+g.week))].sort((a,b)=>a-b);
@@ -25,7 +26,8 @@ players.sort((a,b)=>b.wins-a.wins);
 const displayWeek=weekInProgress?currentWeek:Math.min(18,throughWeek+1);
 const nextWeek=Math.min(18,throughWeek+1);
 const upcoming=rows.filter(g=>+g.week===displayWeek&&!(g.away_score!==""&&g.home_score!=="")).map(g=>({week:+g.week,gameday:g.gameday,gametime:g.gametime,away:g.away_team,home:g.home_team}));
-const livePlayers=Object.entries(cfg.players).map(([name,teams])=>{const rec=teams.map(code=>({code,...(liveTeam[code]||{w:0,l:0,t:0,g:0})}));const current=weekly[name]?.[currentWeek]||{w:0,l:0,t:0};return{name,teams:rec,wins:rec.reduce((n,r)=>n+r.w,0),games:rec.reduce((n,r)=>n+r.g,0),currentWeek:current};}).sort((a,b)=>b.wins-a.wins);\nconst recapPlayers=livePlayers.map(p=>({...p,perfect:perfectWeeks.filter(x=>x.player===p.name&&x.week<=currentWeek).length,weekly:weekly[p.name],recent:weekly[p.name]?.[currentWeek]||{w:0,l:0,t:0}}));
+const livePlayers=Object.entries(cfg.players).map(([name,teams])=>{const rec=teams.map(code=>({code,...(liveTeam[code]||{w:0,l:0,t:0,g:0})}));const current=weekly[name]?.[currentWeek]||{w:0,l:0,t:0};return{name,teams:rec,wins:rec.reduce((n,r)=>n+r.w,0),games:rec.reduce((n,r)=>n+r.g,0),currentWeek:current};}).sort((a,b)=>b.wins-a.wins);
+const recapPlayers=livePlayers.map(p=>({...p,perfect:perfectWeeks.filter(x=>x.player===p.name&&x.week<=currentWeek).length,weekly:weekly[p.name],recent:weekly[p.name]?.[currentWeek]||{w:0,l:0,t:0}}));
 const finalizedPerfectWeeks=perfectWeeks.filter(x=>x.week<=throughWeek);
 const semantic={season:cfg.season,throughWeek,currentWeek,weekInProgress,displayWeek,nextWeek,players,livePlayers,recapWeek:currentWeek,recapPlayers,perfectWeeks:finalizedPerfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
 await fs.mkdir("generated",{recursive:true});
