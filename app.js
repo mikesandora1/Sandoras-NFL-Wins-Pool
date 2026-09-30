@@ -35,7 +35,23 @@ function rankMap(w){let base=D.players.map((p,i)=>({name:p.name,wins:cumulativeW
 function movementValue(n){let w=D.live?.throughWeek||3;if(w<=1)return 0;let now=rankMap(w),prev=rankMap(w-1);return (prev[n]||now[n])-(now[n]||prev[n])}
 function movement(n){let m=D.live?movementValue(n):META[n].move;return m>0?`<span class="move up">▲ ${m}</span>`:m<0?`<span class="move down">▼ ${Math.abs(m)}</span>`:`<span class="move same">—</span>`}function teamChip(t){let c=COLORS[t.team]||'#334155',w=activeWeek(),bw=byeWeekFor(t.team),onBye=bw===w;return `<span class="team ${onBye?'on-bye':''}" style="--team:${c}"><i></i><span>${t.team}</span><b>${t.w}-${t.l}${t.t?'-'+t.t:''}</b>${onBye?`<em>BYE W${w}</em>`:''}</span>`}
 function table(ps){return `<div class="tablewrap"><table><thead><tr><th>Place</th><th>Player</th><th>Teams</th><th>Wins</th><th>Win %</th><th>Last Week</th><th>1st Chance</th><th>Top 3 Chance</th><th>Perfect</th></tr></thead><tbody>${ps.map((p,i)=>`<tr><td class="rank"><span>${i+1}</span>${movement(p.name)}</td><td><b>${p.name}</b></td><td><div class="teams">${p.teams.map(teamChip).join('')}</div></td><td><b>${p.wins}</b></td><td class="pct">${(pct(p)*100).toFixed(1)}%</td><td><span class="weekrec ${(p.recent?.w===3)?'perfectrec':(p.recent?.l===3)?'badrec':''}">${p.recent?`${p.recent.w}–${p.recent.l}`:META[p.name].recent}</span></td><td><b>${META[p.name].first.toFixed(1)}%</b></td><td><b>${META[p.name].top3.toFixed(1)}%</b></td><td>${p.perfect}</td></tr>`).join('')}</tbody></table></div>`}
-function home(){let s=standings(),lead=s[0],total=D.players.reduce((n,p)=>n+p.games,0);let tids=[
+function weeklyTakeaways(){
+ let w=D.live?.throughWeek||3,ps=standings(),items=[];
+ let perfect=ps.filter(p=>(p.weekly?.[w]?.w||0)===3);
+ if(perfect.length)items.push(`<b>Perfect Week:</b> ${perfect.map(p=>p.name).join(' and ')} went 3–0 in Week ${w}. No style points required — three wins is three wins.`);
+ let movers=ps.map(p=>({p,m:movementValue(p.name)})).sort((a,b)=>b.m-a.m);
+ if(movers[0]?.m>0)items.push(`<b>Biggest mover:</b> ${movers[0].p.name} climbed ${movers[0].m} spot${movers[0].m===1?'':'s'} after a ${movers[0].p.weekly[w].w}–${movers[0].p.weekly[w].l} Week ${w}.`);
+ let carried=ps.map(p=>{let ts=[...p.teams].sort((a,b)=>b.w-a.w);return{p,top:ts[0],share:p.wins?ts[0].w/p.wins:0}}).sort((a,b)=>b.share-a.share)[0];
+ if(carried)items.push(`<b>Carried by one team:</b> ${carried.p.name}'s ${carried.top.team} account for ${carried.top.w} of ${carried.p.wins} pool wins. That's ${Math.round(carried.share*100)}% of the operation coming from one draft pick.`);
+ let balanced=ps.map(p=>({p,spread:Math.max(...p.teams.map(t=>t.w))-Math.min(...p.teams.map(t=>t.w))})).sort((a,b)=>a.spread-b.spread)[0];
+ if(balanced)items.push(`<b>Three-team balance:</b> ${balanced.p.name} has the tightest spread across his three teams — only ${balanced.spread} win${balanced.spread===1?'':'s'} separates best from worst.`);
+ let rough=ps.map(p=>({p,r:p.weekly?.[w]||{w:0,l:0}})).sort((a,b)=>b.r.l-a.r.l)[0];
+ if(rough?.r.l)items.push(`<b>Rough week:</b> ${rough.p.name} went ${rough.r.w}–${rough.r.l} in Week ${w}. The standings have officially entered the group-chat evidence locker.`);
+ let late=[...D.draft].sort((a,b)=>b.pick-a.pick).map(x=>{let p=D.players.find(p=>p.name===x.player),t=p?.teams.find(t=>t.team===x.team);return{x,t}}).filter(z=>z.t).sort((a,b)=>b.t.w-a.t.w||b.x.pick-a.x.pick)[0];
+ if(late)items.push(`<b>Late-pick receipt:</b> ${late.x.player}'s #${late.x.pick} pick, ${late.x.team}, has ${late.t.w} win${late.t.w===1?'':'s'} through Week ${w}.`);
+ return items.slice(0,6);
+}
+function home(){let s=standings(),lead=s[0],total=D.players.reduce((n,p)=>n+p.games,0);let tids=D.live?weeklyTakeaways():[
 `<b>Sandora chose violence.</b> A 3–0 Week 3 from Detroit, Pittsburgh and the Giants was the league's only clean sweep and moved him into third. Apparently drafting three 2–1 teams is less exciting than drafting a juggernaut, but annoyingly effective.`,
 `<b>Shaffer is running an NFL portfolio with one blue-chip stock and one flaming bag.</b> San Francisco is 3–0; the Chargers are 0–3. Somehow he still climbed two spots this week after a 2–1 showing.`,
 `<b>Tommy's Week 3 should be deleted from the group chat.</b> Seattle, Tampa Bay and New Orleans combined for an 0–3 week. The Bucs are now 0–3, giving Tommy a very efficient way to turn three draft picks into three total wins.`,
