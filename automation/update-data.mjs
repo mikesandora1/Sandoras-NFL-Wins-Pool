@@ -15,6 +15,8 @@ const throughWeek=fullyCompletedWeeks.at(-1)||0;
 const currentWeek=resultWeeks.at(-1)||Math.max(1,throughWeek+1);
 const weekInProgress=currentWeek>throughWeek;
 const finalizedDone=done.filter(g=>+g.week<=throughWeek);
+function buildTeamRecords(games){const team={};for(const g of games){for(const t of [g.away_team,g.home_team]) team[t]??={w:0,l:0,t:0,g:0};const a=+g.away_score,b=+g.home_score;team[g.away_team].g++;team[g.home_team].g++;if(a>b){team[g.away_team].w++;team[g.home_team].l++;}else if(b>a){team[g.home_team].w++;team[g.away_team].l++;}else{team[g.away_team].t++;team[g.home_team].t++;}}return team}
+const liveTeam=buildTeamRecords(done);
 const team={}; for(const g of finalizedDone){for(const t of [g.away_team,g.home_team]) team[t]??={w:0,l:0,t:0,g:0}; const a=+g.away_score,b=+g.home_score;team[g.away_team].g++;team[g.home_team].g++;if(a>b){team[g.away_team].w++;team[g.home_team].l++;}else if(b>a){team[g.home_team].w++;team[g.away_team].l++;}else{team[g.away_team].t++;team[g.home_team].t++;}}
 function resultFor(g,t){const a=+g.away_score,b=+g.home_score,tw=g.away_team===t?a:b,ow=g.away_team===t?b:a;return tw>ow?"W":tw<ow?"L":"T";}
 const weekly={}; const perfectWeeks=[];
@@ -24,8 +26,9 @@ players.sort((a,b)=>b.wins-a.wins);
 const displayWeek=weekInProgress?currentWeek:Math.min(18,throughWeek+1);
 const nextWeek=Math.min(18,throughWeek+1);
 const upcoming=rows.filter(g=>+g.week===displayWeek&&!(g.away_score!==""&&g.home_score!=="")).map(g=>({week:+g.week,gameday:g.gameday,gametime:g.gametime,away:g.away_team,home:g.home_team}));
+const livePlayers=Object.entries(cfg.players).map(([name,teams])=>{const rec=teams.map(code=>({code,...(liveTeam[code]||{w:0,l:0,t:0,g:0})}));const current=weekly[name]?.[currentWeek]||{w:0,l:0,t:0};return{name,teams:rec,wins:rec.reduce((n,r)=>n+r.w,0),games:rec.reduce((n,r)=>n+r.g,0),currentWeek:current};}).sort((a,b)=>b.wins-a.wins);
 const finalizedPerfectWeeks=perfectWeeks.filter(x=>x.week<=throughWeek);
-const semantic={season:cfg.season,throughWeek,currentWeek,weekInProgress,displayWeek,nextWeek,players,perfectWeeks:finalizedPerfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
+const semantic={season:cfg.season,throughWeek,currentWeek,weekInProgress,displayWeek,nextWeek,players,livePlayers,perfectWeeks:finalizedPerfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
 await fs.mkdir("generated",{recursive:true});
 let previous=null;try{previous=JSON.parse(await fs.readFile("generated/current.json","utf8"));}catch{}
 const previousSemantic=previous&&Object.fromEntries(Object.entries(previous).filter(([k])=>k!=="generatedAt"));
