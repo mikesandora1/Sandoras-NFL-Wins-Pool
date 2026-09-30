@@ -26,6 +26,11 @@ const displayWeek=weekInProgress?currentWeek:Math.min(18,throughWeek+1);
 const nextWeek=Math.min(18,throughWeek+1);
 const upcoming=rows.filter(g=>+g.week===displayWeek&&!(g.away_score!==""&&g.home_score!=="")).map(g=>({week:+g.week,gameday:g.gameday,gametime:g.gametime,away:g.away_team,home:g.home_team}));
 const livePlayers=Object.entries(cfg.players).map(([name,teams])=>{const rec=teams.map(code=>({code,...(liveTeam[code]||{w:0,l:0,t:0,g:0})}));const current=weekly[name]?.[currentWeek]||{w:0,l:0,t:0};return{name,teams:rec,wins:rec.reduce((n,r)=>n+r.w,0),games:rec.reduce((n,r)=>n+r.g,0),currentWeek:current};}).sort((a,b)=>b.wins-a.wins);
+const remainingSchedule={};
+for(const code of new Set([...Object.values(cfg.players).flat(),...cfg.undrafted])){
+ remainingSchedule[code]=rows.filter(g=>g.away_score===""&&g.home_score===""&&(g.away_team===code||g.home_team===code)).map(g=>({week:+g.week,opponent:g.away_team===code?g.home_team:g.away_team}));
+}
+const teamRecords=buildTeamRecords(done);
 const recapPlayers=livePlayers.map(p=>({...p,perfect:perfectWeeks.filter(x=>x.player===p.name&&x.week<=currentWeek).length,weekly:weekly[p.name],recent:weekly[p.name]?.[currentWeek]||{w:0,l:0,t:0}}));
 const finalizedPerfectWeeks=perfectWeeks.filter(x=>x.week<=throughWeek);
 const semantic={season:cfg.season,throughWeek,currentWeek,weekInProgress,displayWeek,nextWeek,players,livePlayers,recapWeek:currentWeek,recapPlayers,perfectWeeks:finalizedPerfectWeeks,undrafted:cfg.undrafted.map(code=>({code,...(team[code]||{w:0,l:0,t:0,g:0})})),upcoming};
