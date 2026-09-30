@@ -14,6 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Check generator syntax
+        run: node --check automation/update-data.mjs
       - run: node automation/update-data.mjs
       - name: Validate known Week 3 baseline
         run: node automation/validate-week3.mjs
