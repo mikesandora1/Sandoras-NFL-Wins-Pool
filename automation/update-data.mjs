@@ -34,5 +34,4 @@ let previous=null;try{previous=JSON.parse(await fs.readFile("generated/current.j
 const previousSemantic=previous&&Object.fromEntries(Object.entries(previous).filter(([k])=>k!=="generatedAt"));
 if(previousSemantic&&JSON.stringify(previousSemantic)===JSON.stringify(semantic)){console.log("No NFL data changes; generated file left untouched.");process.exit(0);}
 const out={generatedAt:new Date().toISOString(),...semantic};
-await fs.writeFile("generated/current.json",JSON.stringify(out,null,2)+"
-");console.log(`Generated through Week ${throughWeek}; display Week ${displayWeek}${weekInProgress?" (in progress)":""}`);
+await fs.writeFile("generated/current.json",JSON.stringify(out,null,2)+String.fromCharCode(10));console.log(`Generated through Week ${throughWeek}; display Week ${displayWeek}${weekInProgress?" (in progress)":""}`);
