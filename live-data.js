@@ -14,7 +14,7 @@ window.LIVE_POOL_READY=fetch("generated/current.json",{cache:"no-store"})
     const ps=structuredClone(finalized),week=sb.week;
     if(week>live.throughWeek){
       for(const p of ps){
-        let wr={w:0,l:0,t:0};
+        let wr={w:0,l:0,t:0,finals:0};
         for(const t of p.teams){
           const g=sb.games.find(g=>g.completed&&(g.home===t.code||g.away===t.code));
           if(!g)continue;
@@ -23,7 +23,7 @@ window.LIVE_POOL_READY=fetch("generated/current.json",{cache:"no-store"})
           t.t-=mine===opp?1:0; // pool standings treat an NFL tie as a loss, not a separate pool result
           wr.w+=mine>opp?1:0;wr.l+=mine<=opp?1:0;
         }
-        p.wins=p.teams.reduce((n,t)=>n+t.w,0);p.games=p.teams.reduce((n,t)=>n+t.w+t.l+t.t,0);p.recent=wr;
+        p.wins=p.teams.reduce((n,t)=>n+t.w,0);p.games=p.teams.reduce((n,t)=>n+t.w+t.l+t.t,0);p.recent=wr;if(wr.finals===3&&wr.w===3)p.perfect++;
       }
     }
     base.players=ps;base.live.scoreboard=sb;
