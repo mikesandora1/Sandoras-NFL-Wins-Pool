@@ -9,7 +9,7 @@ window.LIVE_POOL_READY=fetch("generated/current.json",{cache:"no-store"})
   const finalized=live.players.map(p=>({name:p.name,teams:p.teams.map(t=>({code:t.code,team:names[t.code]||t.code,w:t.w,l:t.l,t:t.t})),wins:p.wins,games:p.games,perfect:p.perfect,recent:p.recent,weekly:p.weekly}));
   base.players=structuredClone(finalized);
   base.perfectWeeks=live.perfectWeeks;
-  base.live={...live,names,scoreboard:null};
+  const recapPlayers=(live.recapPlayers||live.players).map(p=>({...p,teams:p.teams.map(t=>({code:t.code,team:names[t.code]||t.code,w:t.w,l:t.l,t:t.t}))}));\n  base.live={...live,names,recapPlayers,scoreboard:null};
   function applyScoreboard(sb){
     const ps=structuredClone(finalized),week=sb.week;
     if(week>live.throughWeek){
