@@ -1,0 +1,17 @@
+{
+  "season": 2026,
+  "tiesCountAsLosses": true,
+  "players": {
+    "Lou": ["PHI","DEN","LV"],
+    "Andy": ["KC","DAL","MIN"],
+    "Brian": ["BUF","GB","CLE"],
+    "Sandora": ["DET","PIT","NYG"],
+    "Jay": ["BAL","JAX","NYJ"],
+    "Nate": ["NE","CIN","IND"],
+    "Shaffer": ["SF","LAC","WAS"],
+    "Tommy": ["SEA","TB","NO"],
+    "Pete": ["LAR","CAR","ATL"],
+    "Mullane": ["HOU","CHI","TEN"]
+  },
+  "undrafted": ["MIA","ARI"]
+}
