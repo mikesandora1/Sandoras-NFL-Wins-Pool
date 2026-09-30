@@ -680,5 +680,8 @@
       "away": "ATL",
       "home": "NO"
     }
-  ]
+  ],
+  "currentWeek": 3,
+  "weekInProgress": false,
+  "displayWeek": 4
 }
