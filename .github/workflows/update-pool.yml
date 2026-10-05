@@ -2,10 +2,27 @@ name: Update NFL pool data
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/15 * * 9-12,1 0,1,4"
-    - cron: "30 13 * 9-12,1 2"
+    # Daily morning refresh during the NFL regular season (12:30 UTC = 8:30 EDT / 7:30 EST)
+    - cron: "30 12 * 9-12,1 *"
+
+    # Sunday game window: roughly noon through 1:00 a.m. ET
+    - cron: "*/15 16-23 * 9-12,1 0"
+    - cron: "*/15 0-5 * 9-12,1 1"
+
+    # Monday Night Football window
+    - cron: "*/15 23 * 9-12,1 1"
+    - cron: "*/15 0-5 * 9-12,1 2"
+
+    # Thursday Night Football window
+    - cron: "*/15 23 * 9-12,1 4"
+    - cron: "*/15 0-5 * 9-12,1 5"
+
+    # Late-season Saturday games (December and January)
+    - cron: "*/15 16-23 * 12,1 6"
+
 permissions:
   contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
