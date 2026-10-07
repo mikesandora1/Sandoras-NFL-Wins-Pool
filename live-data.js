@@ -1,6 +1,7 @@
 // v6 bridge. Static/generated data is the durable fallback; live scoreboard overlays finalized games.
 window.LIVE_POOL_DATA=null;
-window.LIVE_POOL_READY=fetch("generated/current.json",{cache:"no-store"})
+const LIVE_DATA_URL="https://raw.githubusercontent.com/mikesandora1/Sandoras-NFL-Wins-Pool/main/generated/current.json";
+window.LIVE_POOL_READY=fetch(`${LIVE_DATA_URL}?v=${Date.now()}`,{cache:"no-store"})
 .then(r=>r.ok?r.json():Promise.reject(new Error("generated data unavailable")))
 .then(live=>{
   window.LIVE_POOL_DATA=live;
