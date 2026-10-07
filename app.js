@@ -64,28 +64,117 @@ function weeklyTakeaways(){
  let w=D.live?.recapWeek||D.live?.throughWeek||3,ps=D.live?.recapPlayers||standings(),items=[],used=new Set();
  const add=(name,html)=>{if(!used.has(name)){items.push(html);used.add(name)}};
  const rec=p=>p.weekly?.[w]||{w:0,l:0};
+ const pick=(arr,key)=>{let n=0;for(const ch of String(key))n=(n*31+ch.charCodeAt(0))>>>0;return arr[n%arr.length]};
  let perfect=ps.filter(p=>rec(p).w===3);
- perfect.forEach(p=>add(p.name,`<b>${p.name} chose violence.</b> A 3–0 Week ${w} means everybody else gets to hear about it until at least Thursday. Three teams entered; three wins left. Annoyingly efficient.`));
+ perfect.forEach(p=>{
+   const head=pick([
+     `${p.name} just turned Sunday into a personal highlight reel.`,
+     `${p.name} went 3–0 and will now be accepting apologies in writing.`,
+     `${p.name} brought a broom to Week ${w}.`,
+     `${p.name} apparently forgot this pool was supposed to be difficult.`,
+     `${p.name} posted a clean sheet and immediately became unbearable.`,
+     `${p.name} just went full obnoxious mode.`
+   ],p.name+"perfect"+w);
+   const tail=pick([
+     `Three teams, three wins, zero humility expected.`,
+     `A perfect week is nice; making everyone else hear about it is the real prize.`,
+     `That is the kind of Sunday that produces unsolicited standings screenshots.`,
+     `The group chat has been advised to mute notifications until Thursday.`,
+     `Efficiency level: deeply irritating.`
+   ],p.name+"perfect-tail"+w);
+   add(p.name,`<b>${head}</b> A 3–0 Week ${w}. ${tail}`);
+ });
  let disaster=ps.filter(p=>rec(p).l===3);
- disaster.forEach(p=>add(p.name,`<b>${p.name} would like Week ${w} stricken from the record.</b> An 0–3 masterpiece: three teams, zero wins, and absolutely no reason to reopen the group chat until next week.`));
+ disaster.forEach(p=>{
+   const head=pick([
+     `${p.name} would like Week ${w} sealed by court order.`,
+     `${p.name} just completed the reverse victory lap.`,
+     `${p.name}'s Sunday had the structural integrity of wet cardboard.`,
+     `${p.name} went 0–3 and is currently declining all media requests.`,
+     `${p.name} has requested that we skip directly to next Thursday.`
+   ],p.name+"disaster"+w);
+   const tail=pick([
+     `Three teams, zero wins, and an impressive commitment to the bit.`,
+     `The good news is there is literally nowhere to go but up.`,
+     `Even the standings looked away out of respect.`,
+     `A performance best experienced once and never discussed again.`
+   ],p.name+"disaster-tail"+w);
+   add(p.name,`<b>${head}</b> ${tail}`);
+ });
  let movers=ps.map(p=>({p,m:movementValue(p.name),r:rec(p)})).sort((a,b)=>b.m-a.m);
- if(movers[0]?.m>0)add(movers[0].p.name,`<b>${movers[0].p.name} has entered the chat.</b> A ${movers[0].r.w}–${movers[0].r.l} week moved him up ${movers[0].m} spot${movers[0].m===1?'':'s'}. Nothing like one good Sunday to suddenly develop very strong opinions about the standings.`);
+ if(movers[0]?.m>0){
+   const x=movers[0],head=pick([
+     `${x.p.name} found the elevator button.`,
+     `${x.p.name} is suddenly acting like he has always belonged up here.`,
+     `${x.p.name} made a move and immediately developed swagger.`,
+     `${x.p.name} climbed the standings and brought receipts.`
+   ],x.p.name+"rise"+w);
+   add(x.p.name,`<b>${head}</b> A ${x.r.w}–${x.r.l} week moved him up ${x.m} spot${x.m===1?'':'s'}. Nothing creates confidence quite like one good Sunday and a sortable table.`);
+ }
  let fall=[...movers].sort((a,b)=>a.m-b.m)[0];
- if(fall?.m<0)add(fall.p.name,`<b>${fall.p.name} is headed in the wrong direction.</b> Week ${w} sent him down ${Math.abs(fall.m)} spot${Math.abs(fall.m)===1?'':'s'}. The standings are not technically judging him, but everyone else is allowed to.`);
+ if(fall?.m<0){
+   const head=pick([
+     `${fall.p.name} has been asked to report to the lower floors.`,
+     `${fall.p.name} is discovering that gravity works in the standings too.`,
+     `${fall.p.name}'s stock chart is currently pointing the wrong way.`,
+     `${fall.p.name} picked a bad week to look down.`
+   ],fall.p.name+"fall"+w);
+   add(fall.p.name,`<b>${head}</b> Week ${w} sent him down ${Math.abs(fall.m)} spot${Math.abs(fall.m)===1?'':'s'}. The standings are not technically laughing, but the rest of the league can handle that part.`);
+ }
  let carried=ps.map(p=>{let ts=[...p.teams].sort((a,b)=>b.w-a.w),share=p.wins?ts[0].w/p.wins:0;return{p,top:ts[0],share}}).sort((a,b)=>b.share-a.share)[0];
- if(carried&&carried.share>=.4)add(carried.p.name,`<b>${carried.p.name} is running a one-team operation.</b> The ${carried.top.team} have supplied ${carried.top.w} of his ${carried.p.wins} wins — ${Math.round(carried.share*100)}% of the entire portfolio. The other two picks are encouraged to begin participating whenever convenient.`);
+ if(carried&&carried.share>=.4){
+   const head=pick([
+     `${carried.p.name} is operating a one-team small business.`,
+     `${carried.p.name} has one employee doing everybody else's job.`,
+     `${carried.p.name}'s roster has a designated adult in the room.`,
+     `${carried.p.name} appears to have drafted one team and two witnesses.`
+   ],carried.p.name+"carry"+w);
+   add(carried.p.name,`<b>${head}</b> The ${carried.top.team} have supplied ${carried.top.w} of his ${carried.p.wins} wins — ${Math.round(carried.share*100)}% of the whole operation. The other two picks have been invited to contribute whenever the mood strikes.`);
+ }
  let ugly=ps.map(p=>({p,zeros:p.teams.filter(t=>t.w===0),best:[...p.teams].sort((a,b)=>b.w-a.w)[0]})).filter(x=>x.zeros.length).sort((a,b)=>b.zeros.length-a.zeros.length)[0];
- if(ugly)add(ugly.p.name,`<b>${ugly.p.name}'s draft board is developing a problem.</b> ${ugly.zeros.map(t=>t.team).join(' and ')} ${ugly.zeros.length===1?'is':'are'} still sitting on zero wins. ${ugly.best.team} is currently being asked to carry a workload that was not in the job description.`);
+ if(ugly){
+   const head=pick([
+     `${ugly.p.name}'s draft board has entered the warranty-claim phase.`,
+     `${ugly.p.name} is getting absolutely nothing from part of the roster.`,
+     `${ugly.p.name}'s draft has a couple of decorative pieces.`,
+     `${ugly.p.name} may want to check whether all three picks were actually activated.`
+   ],ugly.p.name+"zero"+w);
+   add(ugly.p.name,`<b>${head}</b> ${ugly.zeros.map(t=>t.team).join(' and ')} ${ugly.zeros.length===1?'is':'are'} still sitting on zero wins. ${ugly.best.team} is carrying a workload that was definitely not in the brochure.`);
+ }
  let balanced=ps.map(p=>({p,spread:Math.max(...p.teams.map(t=>t.w))-Math.min(...p.teams.map(t=>t.w))})).sort((a,b)=>a.spread-b.spread||b.p.wins-a.p.wins)[0];
- if(balanced)add(balanced.p.name,`<b>${balanced.p.name} is refusing to provide easy material.</b> His three teams are separated by only ${balanced.spread} win${balanced.spread===1?'':'s'}. No obvious disaster, no ridiculous carry job — just irritating competence.`);
+ if(balanced){
+   const head=pick([
+     `${balanced.p.name} is being annoyingly responsible.`,
+     `${balanced.p.name} has built the least entertaining competent roster.`,
+     `${balanced.p.name} is refusing to give the comedy department anything useful.`,
+     `${balanced.p.name}'s teams are suspiciously well-adjusted.`
+   ],balanced.p.name+"balanced"+w);
+   add(balanced.p.name,`<b>${head}</b> His three teams are separated by only ${balanced.spread} win${balanced.spread===1?'':'s'}. No catastrophe, no ridiculous carry job — just the kind of boring competence everyone else secretly wants.`);
+ }
  let late=[...D.draft].sort((a,b)=>b.pick-a.pick).map(x=>{let p=ps.find(p=>p.name===x.player),t=p?.teams.find(t=>t.team===x.team);return{x,t,p}}).filter(z=>z.t).sort((a,b)=>b.t.w-a.t.w||b.x.pick-a.x.pick)[0];
- if(late)add(late.p.name,`<b>Late-round receipt alert:</b> ${late.x.player} grabbed the ${late.x.team} at pick #${late.x.pick}, and they already have ${late.t.w} win${late.t.w===1?'':'s'}. Somewhere, an earlier pick is quietly hoping nobody scrolls over to the Draft tab.`);
+ if(late){
+   const head=pick([
+     `Late-round theft report:`,
+     `Draft-room receipt located:`,
+     `Value pick alert:`,
+     `Someone owes ${late.x.player} a scouting compliment:`
+   ],late.x.player+"late"+w);
+   add(late.p.name,`<b>${head}</b> ${late.x.player} grabbed the ${late.x.team} at pick #${late.x.pick}, and they already have ${late.t.w} win${late.t.w===1?'':'s'}. Several earlier selections would prefer that nobody click the Draft tab.`);
+ }
  let leader=[...ps].sort((a,b)=>b.wins-a.wins)[0];
- if(leader)add(leader.name,`<b>${leader.name} currently owns the big chair.</b> ${leader.wins} wins puts him on top through Week ${w}. Enjoy the view; this league has a long history of turning screenshots into evidence.`);
+ if(leader){
+   const head=pick([
+     `${leader.name} currently has the keys to the penthouse.`,
+     `${leader.name} is sitting in first and pretending to be normal about it.`,
+     `${leader.name} owns the screenshot everyone else hates right now.`,
+     `${leader.name} is currently the problem the rest of the league needs to solve.`
+   ],leader.name+"leader"+w);
+   add(leader.name,`<b>${head}</b> ${leader.wins} wins puts him on top through Week ${w}. Enjoy the view; this league has a strong tradition of turning temporary leads into permanent group-chat evidence.`);
+ }
  return items.slice(0,6);
 }
 function home(){let s=standings(),lead=s[0],total=D.players.reduce((n,p)=>n+p.games,0);let tids=D.live?weeklyTakeaways():[
-`<b>Sandora chose violence.</b> A 3–0 Week 3 from Detroit, Pittsburgh and the Giants was the league's only clean sweep and moved him into third. Apparently drafting three 2–1 teams is less exciting than drafting a juggernaut, but annoyingly effective.`,
+`<b>Sandora brought a broom to Week 3.</b> Detroit, Pittsburgh and the Giants delivered the league's only clean sweep and moved him into third. Three picks, three wins, and exactly the amount of humility you would expect.`,
 `<b>Shaffer is running an NFL portfolio with one blue-chip stock and one flaming bag.</b> San Francisco is 3–0; the Chargers are 0–3. Somehow he still climbed two spots this week after a 2–1 showing.`,
 `<b>Tommy's Week 3 should be deleted from the group chat.</b> Seattle, Tampa Bay and New Orleans combined for an 0–3 week. The Bucs are now 0–3, giving Tommy a very efficient way to turn three draft picks into three total wins.`,
 `<b>Lou's late Raiders pick is doing heavy lifting.</b> Las Vegas is 3–0 while his Eagles just got handled by Chicago. Lou still owns a share of first, but the undefeated team he drafted 30th is currently his best asset.`,
