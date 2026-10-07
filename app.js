@@ -44,15 +44,54 @@ const COLORS={Eagles:'#004C54',Broncos:'#FB4F14',Raiders:'#A5ACAF',Chiefs:'#E318
 function standings(){return [...D.players].sort((a,b)=>b.wins-a.wins)}function pct(p){return p.games?p.wins/p.games:0}
 let PROJ_CACHE={key:"",data:{}};
 function projections(){
- const key=D.players.map(p=>p.teams.map(t=>`${t.w}-${t.l}-${t.t}`).join("/")).join("|");if(PROJ_CACHE.key===key)return PROJ_CACHE.data;
+ const schedule=D.live?.remainingSchedule||{},records=D.live?.teamRecords||{};
+ const key=JSON.stringify({players:D.players.map(p=>p.teams.map(t=>[t.code,t.w,t.l,t.t])),generatedAt:D.live?.generatedAt||"",schedule});
+ if(PROJ_CACHE.key===key)return PROJ_CACHE.data;
  let seed=2166136261;for(const ch of key)seed=Math.imul(seed^ch.charCodeAt(0),16777619)>>>0;
  const rand=()=>{seed+=0x6D2B79F5;let t=seed;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296};
  const n=25000,first={},top3={};D.players.forEach(p=>{first[p.name]=0;top3[p.name]=0});
+ const priorGames=12;
+ const strength=code=>{
+   const r=records[code]||{w:0,l:0,t:0,g:0},g=r.g||r.w+r.l+r.t;
+   return (r.w+.5*r.t+priorGames*.5)/(g+priorGames);
+ };
+ const winProb=(a,b)=>{
+   const qa=Math.min(.95,Math.max(.05,strength(a))),qb=Math.min(.95,Math.max(.05,strength(b)));
+   const oa=qa/(1-qa),ob=qb/(1-qb);
+   return oa/(oa+ob);
+ };
+ const gameMap=new Map();
+ Object.entries(schedule).forEach(([team,games])=>games.forEach(g=>{
+   const pair=[team,g.opponent].sort(),id=`${g.week}:${pair[0]}:${pair[1]}`;
+   if(!gameMap.has(id))gameMap.set(id,{a:pair[0],b:pair[1]});
+ }));
+ const games=[...gameMap.values()];
+ const currentWins={};
+ Object.entries(records).forEach(([code,r])=>currentWins[code]=r.w||0);
  for(let s=0;s<n;s++){
-  let rows=D.players.map((p,i)=>{let tw=p.teams.map(t=>{let w=t.w,rem=Math.max(0,17-(t.w+t.l+t.t)),prob=(t.w+2)/(t.w+t.l+t.t+4);for(let k=0;k<rem;k++)if(rand()<prob)w++;return w});return{name:p.name,total:tw.reduce((a,b)=>a+b,0),worst:Math.min(...tw),seed:i}});
-  rows.sort((a,b)=>b.total-a.total||b.worst-a.worst||a.seed-b.seed);first[rows[0].name]++;rows.slice(0,3).forEach(x=>top3[x.name]++);
+   const wins={...currentWins};
+   for(const g of games){
+     wins[g.a]??=0;wins[g.b]??=0;
+     if(rand()<winProb(g.a,g.b))wins[g.a]++;else wins[g.b]++;
+   }
+   const rows=D.players.map(p=>{
+     const tw=p.teams.map(t=>wins[t.code]??t.w);
+     return{name:p.name,total:tw.reduce((x,y)=>x+y,0),worst:Math.min(...tw)};
+   }).sort((a,b)=>b.total-a.total||b.worst-a.worst);
+   const bestTotal=rows[0].total,bestWorst=rows[0].worst;
+   const champs=rows.filter(r=>r.total===bestTotal&&r.worst===bestWorst);
+   champs.forEach(r=>first[r.name]+=1/champs.length);
+   let slots=3,i=0;
+   while(slots>0&&i<rows.length){
+     const total=rows[i].total,worst=rows[i].worst;
+     const group=[];while(i<rows.length&&rows[i].total===total&&rows[i].worst===worst)group.push(rows[i++]);
+     const share=Math.min(slots,group.length)/group.length;
+     group.forEach(r=>top3[r.name]+=share);
+     slots-=Math.min(slots,group.length);
+   }
  }
- let out={};D.players.forEach(p=>out[p.name]={first:first[p.name]*100/n,top3:top3[p.name]*100/n});PROJ_CACHE={key,data:out};return out;
+ const out={};D.players.forEach(p=>out[p.name]={first:first[p.name]*100/n,top3:top3[p.name]*100/n});
+ PROJ_CACHE={key,data:out};return out;
 }
 function projection(n){return projections()[n]||{first:META[n]?.first||0,top3:META[n]?.top3||0}}
 function cumulativeWins(p,w){return Object.entries(p.weekly||{}).filter(([wk])=>+wk<=w).reduce((n,[,r])=>n+(r.w||0),0)}
@@ -180,7 +219,7 @@ function home(){let s=standings(),lead=s[0],total=D.players.reduce((n,p)=>n+p.ga
 `<b>Lou's late Raiders pick is doing heavy lifting.</b> Las Vegas is 3–0 while his Eagles just got handled by Chicago. Lou still owns a share of first, but the undefeated team he drafted 30th is currently his best asset.`,
 `<b>Andy has two undefeated anchors.</b> Kansas City and Minnesota are both 3–0, which is covering nicely for Dallas at 1–2. His projection is essentially neck-and-neck with Lou for the league's best chance at first.`,
 `<b>Mullane has discovered an innovative strategy: draft two teams that refuse to win.</b> Houston and Tennessee are both 0–3. Chicago's 2–1 record is currently responsible for 100% of his pool wins.`];
-app.innerHTML=`<section class="hero leader-only"><div class="leader"><span>Current leader</span><strong>${lead.name}</strong><small>${lead.wins} wins · ${projection(lead.name).first.toFixed(1)}% projected chance of 1st</small></div></section><section class="panel"><h2>2026 Standings</h2><p class="sub">NFL ties count as losses. Tied win totals remain tied during the season until the league's playoff-team and worst-team tiebreakers can be applied.</p>${table(s)}<div class="method"><b>Projection note:</b> 1st/Top-3 chances come from a deterministic 25,000-season simulation that recalculates when live standings change. Current team records are blended with a .500 preseason prior to avoid treating three games as destiny; remaining games are simulated independently. Pool wins and the “worst team” tiebreaker are modeled; playoff-team tiebreakers are not yet included.</div></section>${byePanel()}<section class="cards"><div class="card"><span>Players</span><strong>${D.players.length}</strong></div><div class="card"><span>Pool games tracked</span><strong>${total}</strong></div><div class="card"><span>Perfect weeks</span><strong>${D.perfectWeeks.length}</strong></div><div class="card"><span>Latest completed week</span><strong>Week ${D.live?.throughWeek||3}</strong></div></section>${undraftedPanel()}<section class="panel"><h2>Things Your Friends May Not Want to Discuss</h2><div class="tidbits">${tids.map(x=>`<div class="tidbit">${x}</div>`).join('')}</div></section>`}
+app.innerHTML=`<section class="hero leader-only"><div class="leader"><span>Current leader</span><strong>${lead.name}</strong><small>${lead.wins} wins · ${projection(lead.name).first.toFixed(1)}% projected chance of 1st</small></div></section><section class="panel"><h2>2026 Standings</h2><p class="sub">NFL ties count as losses. Tied win totals remain tied during the season until the league's playoff-team and worst-team tiebreakers can be applied.</p>${table(s)}<div class="method"><b>Projection note:</b> 1st/Top-3 chances come from a deterministic 25,000-season simulation. Each remaining NFL matchup is simulated once, so head-to-head opponents cannot both win. Team strength is regressed heavily toward .500 early in the season using a 12-game neutral prior, then current results gain influence as the season progresses. Tied simulated finishes split probability fairly. Pool wins and the “worst team” tiebreaker are modeled; playoff-team tiebreakers are not yet included.</div></section>${byePanel()}<section class="cards"><div class="card"><span>Players</span><strong>${D.players.length}</strong></div><div class="card"><span>Pool games tracked</span><strong>${total}</strong></div><div class="card"><span>Perfect weeks</span><strong>${D.perfectWeeks.length}</strong></div><div class="card"><span>Latest completed week</span><strong>Week ${D.live?.throughWeek||3}</strong></div></section>${undraftedPanel()}<section class="panel"><h2>Things Your Friends May Not Want to Discuss</h2><div class="tidbits">${tids.map(x=>`<div class="tidbit">${x}</div>`).join('')}</div></section>`}
 let TREND_FOCUS=null;
 const TREND_COLORS=["#72e1a5","#ff6b78","#58a6ff","#f5c451","#b794f4","#ff9f43","#38d9a9","#f783ac","#74c0fc","#c0eb75"];
 function trend(){
