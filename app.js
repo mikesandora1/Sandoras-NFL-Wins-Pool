@@ -30,18 +30,18 @@ function undraftedPanel(){let undrafted=UNDRAFTED(),wins=undrafted.reduce((n,t)=
 function remainingSOS(){
  if(!D.live?.remainingSchedule||!D.live?.teamRecords)return [];
  const rec=D.live.teamRecords,sched=D.live.remainingSchedule;
- const strength=code=>{let r=rec[code]||{w:0,l:0,t:0,g:0},g=r.g||r.w+r.l+r.t;return g?(r.w+.5*r.t)/g:.5};
+ const strength=code=>{let r=rec[code]||{w:0,l:0,t:0,g:0},g=r.g||r.w+r.l+r.t;return g?r.w/g:.5};
  return D.players.map(p=>{let teams=p.teams.map(t=>{let games=sched[t.code]||[];return{team:t.team,games:games.length,sos:games.length?games.reduce((n,g)=>n+strength(g.opponent),0)/games.length:0}}),games=teams.reduce((n,t)=>n+t.games,0);return{name:p.name,sos:games?teams.reduce((n,t)=>n+t.sos*t.games,0)/games:0,teams}}).sort((a,b)=>b.sos-a.sos);
 }
 function sosTable(){
  let rows=remainingSOS();if(!rows.length)return "";
  let body=rows.map((r,i)=>"<tr><td>"+(i+1)+"</td><td><b>"+r.name+"</b></td><td><b>"+(r.sos*100).toFixed(1)+"%</b></td><td>"+r.teams.map(t=>t.team+" "+(t.sos*100).toFixed(1)+"%").join(" · ")+"</td></tr>").join("");
- return '<section class="panel"><div class="eyebrow">THE ROAD AHEAD</div><h2>Remaining Strength of Schedule</h2><p class="sub">Ordered from toughest remaining slate to lightest.</p><div class="tablewrap"><table><thead><tr><th>Rank</th><th>Player</th><th>Opponent %</th><th>By team</th></tr></thead><tbody>'+body+'</tbody></table></div><div class="method"><b>Method:</b> current opponent records across every remaining game; ties count as half. Higher values indicate a tougher schedule.</div></section>';
+ return '<section class="panel"><div class="eyebrow">THE ROAD AHEAD</div><h2>Remaining Strength of Schedule</h2><p class="sub">Ordered from toughest remaining slate to lightest.</p><div class="tablewrap"><table><thead><tr><th>Rank</th><th>Player</th><th>Opponent %</th><th>By team</th></tr></thead><tbody>'+body+'</tbody></table></div><div class="method"><b>Method:</b> current opponent records across every remaining game; ties count as losses (zero wins). Higher values indicate a tougher schedule.</div></section>';
 }
-function ahead(){let w=activeWeek();let sorted=standings();app.innerHTML=`<section class="panel"><div class="week-ahead-head"><div><div class="eyebrow">NEXT UP</div><h2>Week ${w} Ahead</h2><p class="sub">Every contestant's three NFL matchups in one place. Bye teams will automatically flip to a BYE card when their week arrives.</p></div></div><div class="ahead-grid">${sorted.map(p=>`<article class="ahead-card"><div class="ahead-player"><b>${p.name}</b><span>${p.wins} wins · ${p.recent?`${p.recent.w}–${p.recent.l}`:META[p.name].recent} last week</span></div>${p.teams.map(t=>matchupChip(t.team)).join('')}</article>`).join('')}</div></section>${sosTable()}${undraftedPanel()}`}
+function ahead(){let w=activeWeek();let sorted=standings();app.innerHTML=`<section class="panel"><div class="week-ahead-head"><div><div class="eyebrow">NEXT UP</div><h2>Week ${w} Ahead</h2><p class="sub">Every contestant's three NFL matchups in one place. Bye teams will automatically flip to a BYE card when their week arrives.</p></div></div><div class="ahead-grid">${sorted.map(p=>`<article class="ahead-card"><div class="ahead-player"><b>${p.name}</b><span>${p.wins} wins · ${p.recent?`${recordText(p.recent)}`:META[p.name].recent} last week</span></div>${p.teams.map(t=>matchupChip(t.team)).join('')}</article>`).join('')}</div></section>${sosTable()}${undraftedPanel()}`}
 
 const COLORS={Eagles:'#004C54',Broncos:'#FB4F14',Raiders:'#A5ACAF',Chiefs:'#E31837',Cowboys:'#869397',Vikings:'#4F2683',Bills:'#00338D',Packers:'#203731',Browns:'#FF3C00',Lions:'#0076B6',Steelers:'#FFB612',Giants:'#0B2265',Ravens:'#241773',Jaguars:'#00A5B5',Jets:'#125740',Patriots:'#C60C30',Bengals:'#FB4F14',Colts:'#002C5F','49ers':'#AA0000',Chargers:'#0080C6',Commanders:'#5A1414',Seahawks:'#69BE28',Bucs:'#D50A0A',Saints:'#D3BC8D',Rams:'#003594',Panthers:'#0085CA',Falcons:'#A71930',Texans:'#03202F',Bears:'#C83803',Titans:'#4B92DB'};
-function standings(){return [...D.players].sort((a,b)=>b.wins-a.wins)}function pct(p){return p.games?p.wins/p.games:0}
+function standings(){return [...D.players].sort((a,b)=>b.wins-a.wins)}function pct(p){return p.games?p.wins/p.games:0}function recordText(r){return `${r.w}–${r.l}${r.t?`–${r.t}`:""}`}
 let PROJ_CACHE={key:"",data:{}};
 function projections(){
  const schedule=D.live?.remainingSchedule||{},records=D.live?.teamRecords||{};
@@ -53,7 +53,7 @@ function projections(){
  const priorGames=12;
  const strength=code=>{
    const r=records[code]||{w:0,l:0,t:0,g:0},g=r.g||r.w+r.l+r.t;
-   return (r.w+.5*r.t+priorGames*.5)/(g+priorGames);
+   return (r.w+priorGames*.5)/(g+priorGames);
  };
  const winProb=(a,b)=>{
    const qa=Math.min(.95,Math.max(.05,strength(a))),qb=Math.min(.95,Math.max(.05,strength(b)));
@@ -98,7 +98,7 @@ function cumulativeWins(p,w){return Object.entries(p.weekly||{}).filter(([wk])=>
 function rankMap(w){let base=D.players.map((p,i)=>({name:p.name,wins:cumulativeWins(p,w),seed:i})).sort((a,b)=>b.wins-a.wins||a.seed-b.seed),out={};base.forEach((p,i)=>out[p.name]=i+1);return out}
 function movementValue(n){let w=D.live?.throughWeek||3;if(w<=1)return 0;if(D.live?.scoreboard?.week>w){let prev=rankMap(w),now={};standings().forEach((p,i)=>now[p.name]=i+1);return (prev[n]||now[n])-(now[n]||prev[n])}let now=rankMap(w),prev=rankMap(w-1);return (prev[n]||now[n])-(now[n]||prev[n])}
 function movement(n){let m=D.live?movementValue(n):META[n].move;return m>0?`<span class="move up">▲ ${m}</span>`:m<0?`<span class="move down">▼ ${Math.abs(m)}</span>`:`<span class="move same">—</span>`}function teamChip(t){let c=COLORS[t.team]||'#334155',w=activeWeek(),bw=byeWeekFor(t.team),onBye=bw===w;return `<span class="team ${onBye?'on-bye':''}" style="--team:${c}"><i></i><span>${t.team}</span><b>${t.w}-${t.l}${t.t?'-'+t.t:''}</b>${onBye?`<em>BYE W${w}</em>`:''}</span>`}
-function table(ps){return `<div class="tablewrap"><table><thead><tr><th>Place</th><th>Player</th><th>Teams</th><th>Wins</th><th>Win %</th><th>Last Week</th><th>1st Chance</th><th>Top 3 Chance</th><th>Perfect</th></tr></thead><tbody>${ps.map((p,i)=>`<tr><td class="rank"><span>${i+1}</span>${movement(p.name)}</td><td><b>${p.name}</b></td><td><div class="teams">${p.teams.map(teamChip).join('')}</div></td><td><b>${p.wins}</b></td><td class="pct">${(pct(p)*100).toFixed(1)}%</td><td><span class="weekrec ${(p.recent?.w===3)?'perfectrec':(p.recent?.l===3)?'badrec':''}">${p.recent?`${p.recent.w}–${p.recent.l}`:META[p.name].recent}</span></td><td><b>${projection(p.name).first.toFixed(1)}%</b></td><td><b>${projection(p.name).top3.toFixed(1)}%</b></td><td>${p.perfect}</td></tr>`).join('')}</tbody></table></div>`}
+function table(ps){return `<div class="tablewrap"><table><thead><tr><th>Place</th><th>Player</th><th>Teams</th><th>Wins</th><th>Win %</th><th>Last Week</th><th>1st Chance</th><th>Top 3 Chance</th><th>Perfect</th></tr></thead><tbody>${ps.map((p,i)=>`<tr><td class="rank"><span>${i+1}</span>${movement(p.name)}</td><td><b>${p.name}</b></td><td><div class="teams">${p.teams.map(teamChip).join('')}</div></td><td><b>${p.wins}</b></td><td class="pct">${(pct(p)*100).toFixed(1)}%</td><td><span class="weekrec ${(p.recent?.w===3)?'perfectrec':((p.recent?.l||0)+(p.recent?.t||0)===3)?'badrec':''}">${p.recent?`${recordText(p.recent)}`:META[p.name].recent}</span></td><td><b>${projection(p.name).first.toFixed(1)}%</b></td><td><b>${projection(p.name).top3.toFixed(1)}%</b></td><td>${p.perfect}</td></tr>`).join('')}</tbody></table></div>`}
 function weeklyTakeaways(){
  let w=D.live?.recapWeek||D.live?.throughWeek||3,ps=D.live?.recapPlayers||standings(),items=[],used=new Set();
  const add=(name,html)=>{if(!used.has(name)){items.push(html);used.add(name)}};
@@ -123,7 +123,17 @@ function weeklyTakeaways(){
    ],p.name+"perfect-tail"+w);
    add(p.name,`<b>${head}</b> A 3–0 Week ${w}. ${tail}`);
  });
- let disaster=ps.filter(p=>rec(p).l===3);
+ const tied=ps.filter(p=>rec(p).t>0);
+ tied.forEach(p=>{
+   const r=rec(p),teams=p.teams.filter(t=>(t.t||0)>0).map(t=>t.team);
+   const head=pick([
+     `${p.name} found the only way to lose without technically losing.`,
+     `${p.name} gets a tie on the scoreboard and absolutely nothing in the pool.`,
+     `${p.name} discovered that a draw is just a loss in a nicer suit.`
+   ],p.name+"tie"+w);
+   add(p.name,`<b>${head}</b> Week ${w}: ${recordText(r)}. ${teams.join(" and ")||"A drafted team"} finished tied; the NFL keeps the T, this contest keeps the zero wins.`);
+ });
+ let disaster=ps.filter(p=>rec(p).w===0&&(rec(p).l+rec(p).t)===3);
  disaster.forEach(p=>{
    const head=pick([
      `${p.name} would like Week ${w} sealed by court order.`,
@@ -148,7 +158,7 @@ function weeklyTakeaways(){
      `${x.p.name} made a move and immediately developed swagger.`,
      `${x.p.name} climbed the standings and brought receipts.`
    ],x.p.name+"rise"+w);
-   add(x.p.name,`<b>${head}</b> A ${x.r.w}–${x.r.l} week moved him up ${x.m} spot${x.m===1?'':'s'}. Nothing creates confidence quite like one good Sunday and a sortable table.`);
+   add(x.p.name,`<b>${head}</b> A ${recordText(x.r)} week moved him up ${x.m} spot${x.m===1?'':'s'}. Nothing creates confidence quite like one good Sunday and a sortable table.`);
  }
  let fall=[...movers].sort((a,b)=>a.m-b.m)[0];
  if(fall?.m<0){
