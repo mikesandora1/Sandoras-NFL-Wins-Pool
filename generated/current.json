@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-12T04:07:10.629Z",
+  "generatedAt": "2026-10-13T04:18:45.384Z",
   "season": 2026,
-  "throughWeek": 4,
+  "throughWeek": 5,
   "currentWeek": 5,
-  "weekInProgress": true,
-  "displayWeek": 5,
-  "nextWeek": 5,
+  "weekInProgress": false,
+  "displayWeek": 6,
+  "nextWeek": 6,
   "players": [
     {
       "name": "Andy",
@@ -20,20 +20,20 @@
         {
           "code": "DAL",
           "w": 2,
-          "l": 2,
+          "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "MIN",
-          "w": 4,
+          "w": 5,
           "l": 0,
           "t": 0,
-          "g": 4
+          "g": 5
         }
       ],
-      "wins": 10,
-      "games": 12,
+      "wins": 11,
+      "games": 14,
       "worstTeamWins": 2,
       "weekly": {
         "1": {
@@ -63,8 +63,8 @@
         }
       },
       "recent": {
-        "w": 3,
-        "l": 0,
+        "w": 1,
+        "l": 1,
         "t": 0
       },
       "perfect": 2
@@ -74,29 +74,29 @@
       "teams": [
         {
           "code": "BUF",
-          "w": 3,
+          "w": 4,
           "l": 1,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "GB",
-          "w": 2,
+          "w": 3,
           "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "CLE",
           "w": 3,
-          "l": 1,
+          "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         }
       ],
-      "wins": 8,
-      "games": 12,
-      "worstTeamWins": 2,
+      "wins": 10,
+      "games": 15,
+      "worstTeamWins": 3,
       "weekly": {
         "1": {
           "w": 1,
@@ -119,7 +119,7 @@
           "t": 0
         },
         "5": {
-          "w": 1,
+          "w": 2,
           "l": 1,
           "t": 0
         }
@@ -132,42 +132,42 @@
       "perfect": 1
     },
     {
-      "name": "Lou",
+      "name": "Jay",
       "teams": [
         {
-          "code": "PHI",
-          "w": 2,
-          "l": 2,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "DEN",
-          "w": 2,
-          "l": 2,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "LV",
-          "w": 3,
+          "code": "BAL",
+          "w": 4,
           "l": 1,
           "t": 0,
-          "g": 4
+          "g": 5
+        },
+        {
+          "code": "JAX",
+          "w": 4,
+          "l": 1,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "NYJ",
+          "w": 2,
+          "l": 3,
+          "t": 0,
+          "g": 5
         }
       ],
-      "wins": 7,
-      "games": 12,
+      "wins": 10,
+      "games": 15,
       "worstTeamWins": 2,
       "weekly": {
         "1": {
-          "w": 2,
-          "l": 1,
+          "w": 3,
+          "l": 0,
           "t": 0
         },
         "2": {
-          "w": 3,
-          "l": 0,
+          "w": 0,
+          "l": 3,
           "t": 0
         },
         "3": {
@@ -176,51 +176,51 @@
           "t": 0
         },
         "4": {
-          "w": 0,
-          "l": 3,
+          "w": 2,
+          "l": 1,
           "t": 0
         },
         "5": {
-          "w": 1,
-          "l": 2,
+          "w": 3,
+          "l": 0,
           "t": 0
         }
       },
       "recent": {
-        "w": 0,
-        "l": 3,
+        "w": 3,
+        "l": 0,
         "t": 0
       },
-      "perfect": 1
+      "perfect": 2
     },
     {
       "name": "Sandora",
       "teams": [
         {
           "code": "DET",
-          "w": 2,
+          "w": 3,
           "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "PIT",
-          "w": 2,
+          "w": 3,
           "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "NYG",
           "w": 3,
           "l": 1,
-          "t": 0,
-          "g": 4
+          "t": 1,
+          "g": 5
         }
       ],
-      "wins": 7,
-      "games": 12,
-      "worstTeamWins": 2,
+      "wins": 9,
+      "games": 15,
+      "worstTeamWins": 3,
       "weekly": {
         "1": {
           "w": 3,
@@ -249,49 +249,49 @@
         }
       },
       "recent": {
-        "w": 1,
-        "l": 2,
-        "t": 0
+        "w": 2,
+        "l": 0,
+        "t": 1
       },
       "perfect": 2
     },
     {
-      "name": "Jay",
+      "name": "Lou",
       "teams": [
         {
-          "code": "BAL",
-          "w": 3,
-          "l": 1,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "JAX",
-          "w": 3,
-          "l": 1,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "NYJ",
-          "w": 1,
+          "code": "PHI",
+          "w": 2,
           "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
+        },
+        {
+          "code": "DEN",
+          "w": 3,
+          "l": 2,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "LV",
+          "w": 3,
+          "l": 2,
+          "t": 0,
+          "g": 5
         }
       ],
-      "wins": 7,
-      "games": 12,
-      "worstTeamWins": 1,
+      "wins": 8,
+      "games": 15,
+      "worstTeamWins": 2,
       "weekly": {
         "1": {
-          "w": 3,
-          "l": 0,
+          "w": 2,
+          "l": 1,
           "t": 0
         },
         "2": {
-          "w": 0,
-          "l": 3,
+          "w": 3,
+          "l": 0,
           "t": 0
         },
         "3": {
@@ -300,19 +300,19 @@
           "t": 0
         },
         "4": {
-          "w": 2,
-          "l": 1,
+          "w": 0,
+          "l": 3,
           "t": 0
         },
         "5": {
-          "w": 3,
-          "l": 0,
+          "w": 1,
+          "l": 2,
           "t": 0
         }
       },
       "recent": {
-        "w": 2,
-        "l": 1,
+        "w": 1,
+        "l": 2,
         "t": 0
       },
       "perfect": 1
@@ -322,28 +322,28 @@
       "teams": [
         {
           "code": "NE",
-          "w": 2,
+          "w": 3,
           "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "CIN",
-          "w": 2,
+          "w": 3,
           "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "IND",
           "w": 2,
-          "l": 2,
+          "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
         }
       ],
-      "wins": 6,
-      "games": 12,
+      "wins": 8,
+      "games": 15,
       "worstTeamWins": 2,
       "weekly": {
         "1": {
@@ -380,14 +380,76 @@
       "perfect": 0
     },
     {
+      "name": "Shaffer",
+      "teams": [
+        {
+          "code": "SF",
+          "w": 5,
+          "l": 0,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "LAC",
+          "w": 0,
+          "l": 5,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "WAS",
+          "w": 1,
+          "l": 3,
+          "t": 1,
+          "g": 5
+        }
+      ],
+      "wins": 6,
+      "games": 15,
+      "worstTeamWins": 0,
+      "weekly": {
+        "1": {
+          "w": 1,
+          "l": 2,
+          "t": 0
+        },
+        "2": {
+          "w": 1,
+          "l": 2,
+          "t": 0
+        },
+        "3": {
+          "w": 2,
+          "l": 1,
+          "t": 0
+        },
+        "4": {
+          "w": 1,
+          "l": 2,
+          "t": 0
+        },
+        "5": {
+          "w": 1,
+          "l": 1,
+          "t": 1
+        }
+      },
+      "recent": {
+        "w": 1,
+        "l": 1,
+        "t": 1
+      },
+      "perfect": 0
+    },
+    {
       "name": "Pete",
       "teams": [
         {
           "code": "LAR",
           "w": 2,
-          "l": 2,
+          "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "CAR",
@@ -399,13 +461,13 @@
         {
           "code": "ATL",
           "w": 2,
-          "l": 2,
+          "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
         }
       ],
       "wins": 6,
-      "games": 12,
+      "games": 14,
       "worstTeamWins": 2,
       "weekly": {
         "1": {
@@ -430,78 +492,16 @@
         },
         "5": {
           "w": 0,
-          "l": 1,
+          "l": 2,
           "t": 0
         }
       },
       "recent": {
-        "w": 3,
-        "l": 0,
-        "t": 0
-      },
-      "perfect": 1
-    },
-    {
-      "name": "Shaffer",
-      "teams": [
-        {
-          "code": "SF",
-          "w": 4,
-          "l": 0,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "LAC",
-          "w": 0,
-          "l": 4,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "WAS",
-          "w": 1,
-          "l": 3,
-          "t": 0,
-          "g": 4
-        }
-      ],
-      "wins": 5,
-      "games": 12,
-      "worstTeamWins": 0,
-      "weekly": {
-        "1": {
-          "w": 1,
-          "l": 2,
-          "t": 0
-        },
-        "2": {
-          "w": 1,
-          "l": 2,
-          "t": 0
-        },
-        "3": {
-          "w": 2,
-          "l": 1,
-          "t": 0
-        },
-        "4": {
-          "w": 1,
-          "l": 2,
-          "t": 0
-        },
-        "5": {
-          "w": 1,
-          "l": 1,
-          "t": 1
-        }
-      },
-      "recent": {
-        "w": 1,
+        "w": 0,
         "l": 2,
         "t": 0
       },
-      "perfect": 0
+      "perfect": 1
     },
     {
       "name": "Tommy",
@@ -509,28 +509,28 @@
         {
           "code": "SEA",
           "w": 3,
-          "l": 1,
+          "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "TB",
-          "w": 0,
+          "w": 1,
           "l": 4,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "NO",
           "w": 1,
-          "l": 3,
+          "l": 4,
           "t": 0,
-          "g": 4
+          "g": 5
         }
       ],
-      "wins": 4,
-      "games": 12,
-      "worstTeamWins": 0,
+      "wins": 5,
+      "games": 15,
+      "worstTeamWins": 1,
       "weekly": {
         "1": {
           "w": 1,
@@ -570,28 +570,28 @@
       "teams": [
         {
           "code": "HOU",
-          "w": 0,
+          "w": 1,
           "l": 4,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "CHI",
           "w": 3,
-          "l": 1,
+          "l": 2,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "TEN",
           "w": 0,
-          "l": 4,
+          "l": 5,
           "t": 0,
-          "g": 4
+          "g": 5
         }
       ],
-      "wins": 3,
-      "games": 12,
+      "wins": 4,
+      "games": 15,
       "worstTeamWins": 0,
       "weekly": {
         "1": {
@@ -663,6 +663,39 @@
       }
     },
     {
+      "name": "Brian",
+      "teams": [
+        {
+          "code": "BUF",
+          "w": 4,
+          "l": 1,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "GB",
+          "w": 3,
+          "l": 2,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "CLE",
+          "w": 3,
+          "l": 2,
+          "t": 0,
+          "g": 5
+        }
+      ],
+      "wins": 10,
+      "games": 15,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
       "name": "Jay",
       "teams": [
         {
@@ -692,39 +725,6 @@
       "currentWeek": {
         "w": 3,
         "l": 0,
-        "t": 0
-      }
-    },
-    {
-      "name": "Brian",
-      "teams": [
-        {
-          "code": "BUF",
-          "w": 3,
-          "l": 1,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "GB",
-          "w": 3,
-          "l": 2,
-          "t": 0,
-          "g": 5
-        },
-        {
-          "code": "CLE",
-          "w": 3,
-          "l": 2,
-          "t": 0,
-          "g": 5
-        }
-      ],
-      "wins": 9,
-      "games": 14,
-      "currentWeek": {
-        "w": 1,
-        "l": 1,
         "t": 0
       }
     },
@@ -866,9 +866,9 @@
         {
           "code": "LAR",
           "w": 2,
-          "l": 2,
+          "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "CAR",
@@ -886,10 +886,10 @@
         }
       ],
       "wins": 6,
-      "games": 13,
+      "games": 14,
       "currentWeek": {
         "w": 0,
-        "l": 1,
+        "l": 2,
         "t": 0
       }
     },
@@ -1029,6 +1029,72 @@
       }
     },
     {
+      "name": "Brian",
+      "teams": [
+        {
+          "code": "BUF",
+          "w": 4,
+          "l": 1,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "GB",
+          "w": 3,
+          "l": 2,
+          "t": 0,
+          "g": 5
+        },
+        {
+          "code": "CLE",
+          "w": 3,
+          "l": 2,
+          "t": 0,
+          "g": 5
+        }
+      ],
+      "wins": 10,
+      "games": 15,
+      "currentWeek": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      },
+      "perfect": 1,
+      "weekly": {
+        "1": {
+          "w": 1,
+          "l": 2,
+          "t": 0
+        },
+        "2": {
+          "w": 3,
+          "l": 0,
+          "t": 0
+        },
+        "3": {
+          "w": 2,
+          "l": 1,
+          "t": 0
+        },
+        "4": {
+          "w": 2,
+          "l": 1,
+          "t": 0
+        },
+        "5": {
+          "w": 2,
+          "l": 1,
+          "t": 0
+        }
+      },
+      "recent": {
+        "w": 2,
+        "l": 1,
+        "t": 0
+      }
+    },
+    {
       "name": "Jay",
       "teams": [
         {
@@ -1091,72 +1157,6 @@
       "recent": {
         "w": 3,
         "l": 0,
-        "t": 0
-      }
-    },
-    {
-      "name": "Brian",
-      "teams": [
-        {
-          "code": "BUF",
-          "w": 3,
-          "l": 1,
-          "t": 0,
-          "g": 4
-        },
-        {
-          "code": "GB",
-          "w": 3,
-          "l": 2,
-          "t": 0,
-          "g": 5
-        },
-        {
-          "code": "CLE",
-          "w": 3,
-          "l": 2,
-          "t": 0,
-          "g": 5
-        }
-      ],
-      "wins": 9,
-      "games": 14,
-      "currentWeek": {
-        "w": 1,
-        "l": 1,
-        "t": 0
-      },
-      "perfect": 1,
-      "weekly": {
-        "1": {
-          "w": 1,
-          "l": 2,
-          "t": 0
-        },
-        "2": {
-          "w": 3,
-          "l": 0,
-          "t": 0
-        },
-        "3": {
-          "w": 2,
-          "l": 1,
-          "t": 0
-        },
-        "4": {
-          "w": 2,
-          "l": 1,
-          "t": 0
-        },
-        "5": {
-          "w": 1,
-          "l": 1,
-          "t": 0
-        }
-      },
-      "recent": {
-        "w": 1,
-        "l": 1,
         "t": 0
       }
     },
@@ -1430,9 +1430,9 @@
         {
           "code": "LAR",
           "w": 2,
-          "l": 2,
+          "l": 3,
           "t": 0,
-          "g": 4
+          "g": 5
         },
         {
           "code": "CAR",
@@ -1450,10 +1450,10 @@
         }
       ],
       "wins": 6,
-      "games": 13,
+      "games": 14,
       "currentWeek": {
         "w": 0,
-        "l": 1,
+        "l": 2,
         "t": 0
       },
       "perfect": 1,
@@ -1480,13 +1480,13 @@
         },
         "5": {
           "w": 0,
-          "l": 1,
+          "l": 2,
           "t": 0
         }
       },
       "recent": {
         "w": 0,
-        "l": 1,
+        "l": 2,
         "t": 0
       }
     },
@@ -1653,6 +1653,10 @@
       "week": 1
     },
     {
+      "player": "Jay",
+      "week": 5
+    },
+    {
       "player": "Pete",
       "week": 4
     }
@@ -1661,25 +1665,116 @@
     {
       "code": "MIA",
       "w": 0,
-      "l": 4,
+      "l": 5,
       "t": 0,
-      "g": 4
+      "g": 5
     },
     {
       "code": "ARI",
       "w": 1,
-      "l": 3,
+      "l": 4,
       "t": 0,
-      "g": 4
+      "g": 5
     }
   ],
   "upcoming": [
     {
-      "week": 5,
-      "gameday": "2026-10-12",
+      "week": 6,
+      "gameday": "2026-10-15",
       "gametime": "20:15",
-      "away": "BUF",
+      "away": "SEA",
+      "home": "DEN"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "09:30",
+      "away": "HOU",
+      "home": "JAX"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "CHI",
+      "home": "ATL"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "BAL",
+      "home": "CLE"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "TEN",
+      "home": "IND"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "NYJ",
+      "home": "NE"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "NO",
+      "home": "NYG"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "CAR",
+      "home": "PHI"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "13:00",
+      "away": "PIT",
+      "home": "TB"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "16:05",
+      "away": "ARI",
       "home": "LAR"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "16:25",
+      "away": "LAC",
+      "home": "KC"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "16:25",
+      "away": "BUF",
+      "home": "LV"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-18",
+      "gametime": "20:20",
+      "away": "DAL",
+      "home": "GB"
+    },
+    {
+      "week": 6,
+      "gameday": "2026-10-19",
+      "gametime": "20:15",
+      "away": "WAS",
+      "home": "SF"
     }
   ],
   "remainingSchedule": {
@@ -1988,10 +2083,6 @@
       }
     ],
     "BUF": [
-      {
-        "week": 5,
-        "opponent": "LAR"
-      },
       {
         "week": 6,
         "opponent": "LV"
@@ -2893,10 +2984,6 @@
     ],
     "LAR": [
       {
-        "week": 5,
-        "opponent": "BUF"
-      },
-      {
         "week": 6,
         "opponent": "ARI"
       },
@@ -3321,9 +3408,9 @@
     },
     "LAR": {
       "w": 2,
-      "l": 2,
+      "l": 3,
       "t": 0,
-      "g": 4
+      "g": 5
     },
     "CHI": {
       "w": 3,
@@ -3362,10 +3449,10 @@
       "g": 5
     },
     "BUF": {
-      "w": 3,
+      "w": 4,
       "l": 1,
       "t": 0,
-      "g": 4
+      "g": 5
     },
     "HOU": {
       "w": 1,
