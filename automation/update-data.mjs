@@ -5,7 +5,35 @@ const res=await fetch(url); if(!res.ok) throw new Error(`NFL data fetch failed: 
 const raw=await res.text();
 function csv(line){let a=[],s="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c=='"'){if(q&&line[i+1]=='"'){s+='"';i++;}else q=!q;}else if(c===","&&!q){a.push(s);s="";}else s+=c;}a.push(s);return a;}
 const lines=raw.trim().split(String.fromCharCode(10)).map(x=>x.endsWith(String.fromCharCode(13))?x.slice(0,-1):x),h=csv(lines.shift());
-const rows=lines.map(x=>{const v=csv(x),o={};h.forEach((k,i)=>o[k]=v[i]);if(o.away_team==="LA")o.away_team="LAR";if(o.home_team==="LA")o.home_team="LAR";return o;}).filter(g=>+g.season===cfg.season&&g.game_type==="REG");
+let rows=lines.map(x=>{const v=csv(x),o={};h.forEach((k,i)=>o[k]=v[i]);if(o.away_team==="LA")o.away_team="LAR";if(o.home_team==="LA")o.home_team="LAR";return o;}).filter(g=>+g.season===cfg.season&&g.game_type==="REG");
+
+// nflverse is the durable schedule/history source, but can lag during live game windows.
+// Overlay the most relevant current-week results from ESPN before calculating standings.
+const ESPN_MAP={WSH:"WAS",JAC:"JAX",LA:"LAR"};
+const norm=x=>ESPN_MAP[x]||x;
+const now=Date.now();
+const dated=rows.map(r=>({r,t:Date.parse(`${r.gameday}T12:00:00Z`)})).filter(x=>Number.isFinite(x.t));
+const nearest=dated.sort((a,b)=>Math.abs(a.t-now)-Math.abs(b.t-now))[0]?.r;
+const liveWeek=nearest?+nearest.week:null;
+if(liveWeek){
+  try{
+    const sr=await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${cfg.season}&seasontype=2&week=${liveWeek}`,{headers:{"user-agent":"Sandoras-NFL-Wins-Pool/1.0"}});
+    if(sr.ok){
+      const sj=await sr.json();
+      for(const e of sj.events||[]){
+        const c=e.competitions?.[0],cs=c?.competitors||[],home=cs.find(x=>x.homeAway==="home"),away=cs.find(x=>x.homeAway==="away");
+        const hc=norm(home?.team?.abbreviation||""),ac=norm(away?.team?.abbreviation||"");
+        const row=rows.find(r=>+r.week===liveWeek&&r.home_team===hc&&r.away_team===ac);
+        if(!row)continue;
+        if(e.status?.type?.completed){
+          row.home_score=String(+(home?.score||0));
+          row.away_score=String(+(away?.score||0));
+        }
+      }
+      console.log(`ESPN live overlay checked for Week ${liveWeek}.`);
+    }else console.warn(`ESPN scoreboard unavailable: ${sr.status}`);
+  }catch(e){console.warn(`ESPN live overlay failed: ${e.message}`)}
+}
 const done=rows.filter(g=>g.away_score!==""&&g.home_score!=="");
 const resultWeeks=[...new Set(done.map(g=>+g.week))].sort((a,b)=>a-b);
 const scheduledWeeks=[...new Set(rows.map(g=>+g.week))].sort((a,b)=>a-b);
