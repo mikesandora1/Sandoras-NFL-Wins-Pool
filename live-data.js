@@ -1,6 +1,6 @@
 // GitHub Pages bridge. The site reads the latest generated NFL pool data directly from the repo.
 window.LIVE_POOL_DATA=null;
-const LIVE_DATA_URL="https://raw.githubusercontent.com/mikesandora1/Sandoras-NFL-Wins-Pool/main/generated/current.json";
+const LIVE_DATA_URL="./generated/current.json";
 const POOL_REFRESH_MS=5*60*1000;
 const names={PHI:"Eagles",DEN:"Broncos",LV:"Raiders",KC:"Chiefs",DAL:"Cowboys",MIN:"Vikings",BUF:"Bills",GB:"Packers",CLE:"Browns",DET:"Lions",PIT:"Steelers",NYG:"Giants",BAL:"Ravens",JAX:"Jaguars",NYJ:"Jets",NE:"Patriots",CIN:"Bengals",IND:"Colts",SF:"49ers",LAC:"Chargers",WAS:"Commanders",SEA:"Seahawks",TB:"Bucs",NO:"Saints",LA:"Rams",LAR:"Rams",CAR:"Panthers",ATL:"Falcons",HOU:"Texans",CHI:"Bears",TEN:"Titans",MIA:"Dolphins",ARI:"Cardinals"};
 
