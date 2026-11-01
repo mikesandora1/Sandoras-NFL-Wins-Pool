@@ -4,8 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths-ignore:
-      - "generated/current.json"
 
 permissions:
   contents: read
