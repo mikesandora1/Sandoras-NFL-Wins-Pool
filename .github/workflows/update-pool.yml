@@ -1,6 +1,11 @@
 name: Update NFL pool data
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "automation/**"
+      - ".github/workflows/update-pool.yml"
   schedule:
     # Daily morning refresh during the NFL regular season (12:30 UTC = 8:30 EDT / 7:30 EST)
     - cron: "30 12 * 9-12,1 *"
