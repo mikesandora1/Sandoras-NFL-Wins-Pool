@@ -6,19 +6,19 @@ on:
     - cron: "30 12 * 9-12,1 *"
 
     # Sunday game window: roughly noon through 1:00 a.m. ET
-    - cron: "*/15 16-23 * 9-12,1 0"
-    - cron: "*/15 0-5 * 9-12,1 1"
+    - cron: "7,22,37,52 16-23 * 9-12,1 0"
+    - cron: "7,22,37,52 0-5 * 9-12,1 1"
 
     # Monday Night Football window
-    - cron: "*/15 23 * 9-12,1 1"
-    - cron: "*/15 0-5 * 9-12,1 2"
+    - cron: "7,22,37,52 23 * 9-12,1 1"
+    - cron: "7,22,37,52 0-5 * 9-12,1 2"
 
     # Thursday Night Football window
-    - cron: "*/15 23 * 9-12,1 4"
-    - cron: "*/15 0-5 * 9-12,1 5"
+    - cron: "7,22,37,52 23 * 9-12,1 4"
+    - cron: "7,22,37,52 0-5 * 9-12,1 5"
 
     # Late-season Saturday games (December and January)
-    - cron: "*/15 16-23 * 12,1 6"
+    - cron: "7,22,37,52 16-23 * 12,1 6"
 
 permissions:
   contents: write
