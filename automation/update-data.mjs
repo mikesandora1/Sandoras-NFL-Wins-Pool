@@ -1,3 +1,4 @@
+// manual refresh trigger 2026-11-15
 // manual refresh trigger 2026-11-08
 import fs from "node:fs/promises";
 const cfg=JSON.parse(await fs.readFile("automation/pool-config.json","utf8"));
