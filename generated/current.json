@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-20T06:59:36.525Z",
+  "generatedAt": "2026-11-22T19:55:27.948Z",
   "season": 2026,
   "throughWeek": 10,
   "currentWeek": 11,
@@ -2340,8 +2340,8 @@
       "week": 11,
       "gameday": "2026-11-22",
       "gametime": "13:00",
-      "away": "JAX",
-      "home": "NYG"
+      "away": "PIT",
+      "home": "PHI"
     },
     {
       "week": 11,
@@ -2361,8 +2361,8 @@
       "week": 11,
       "gameday": "2026-11-22",
       "gametime": "16:25",
-      "away": "PIT",
-      "home": "PHI"
+      "away": "JAX",
+      "home": "NYG"
     },
     {
       "week": 11,
